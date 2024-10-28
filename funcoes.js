@@ -10,23 +10,27 @@ var projeto = require('./estados_cidades')
 const getListaDeEstados = function(){
     let cidades = []
     let siglas = {}
+    let status = false
     
     projeto.listaDeEstados.estados.forEach(function(item){ 
-        
         cidades.push(item.sigla)
+        status = true
     })
-    
+
     siglas.uf = cidades
     siglas.quantidade = cidades.length
-            
 
-    return siglas
+    if(status == true){
+        return siglas
+    }else{
+        return false
+    }
 }
 
 const getDadosEstado = function(sigla){
-    let siglaEstado = String(sigla).toUpperCase()
+   let siglaEstado = String(sigla).toUpperCase()
    let dadosEstado = {}
-    
+    let status = false
 
     projeto.listaDeEstados.estados.forEach(function(item){
         
@@ -35,13 +39,19 @@ const getDadosEstado = function(sigla){
            dadosEstado.descricao = item.nome
            dadosEstado.capital = item.capital
            dadosEstado.regiao = item.regiao
+           status = true
         }
     })
-return dadosEstado
+    if(status == true){
+        return dadosEstado
+    }else{
+        return false
+    }
 }
 
 const getEstadosRegiao = function(regiao){
     let regiaoEstado = String(regiao).toUpperCase()
+    let status = false
     let json = {regiao: regiaoEstado, 
                 estados: []
                 }
@@ -54,48 +64,49 @@ const getEstadosRegiao = function(regiao){
                                     descricao: item.nome    
                                 }
                              )
+            status = true
         }
     })
-return json
+    if(status == true){
+        return json
+    }else{
+        return false
+    }
 }
 
 const getCapitalPais = function(){
-    let capital = {
-                        capitais: [
-                                    {
-                                        capital_atual: projeto.listaDeEstados.estados[2].capital_pais.capital,
-                                        uf: projeto.listaDeEstados.estados[2].sigla,
-                                        descricao: projeto.listaDeEstados.estados[2].nome,
-                                        capital: projeto.listaDeEstados.estados[2].capital,
-                                        regiao: projeto.listaDeEstados.estados[2].regiao,
-                                        capital_pais_ano_inicio: projeto.listaDeEstados.estados[2].capital_pais.ano_inicio,
-                                        capital_pais_ano_termino: projeto.listaDeEstados.estados[2].capital_pais.ano_fim
-                                    },
-                                    {
-                                       capital_atual: projeto.listaDeEstados.estados[3].capital_pais.capital,
-                                       uf: projeto.listaDeEstados.estados[3].sigla,
-                                       descricao: projeto.listaDeEstados.estados[3].nome,
-                                       capital: projeto.listaDeEstados.estados[3].capital,
-                                       regiao: projeto.listaDeEstados.estados[3].regiao,
-                                       capital_pais_ano_inicio: projeto.listaDeEstados.estados[3].capital_pais.ano_inicio,
-                                       capital_pais_ano_termino: projeto.listaDeEstados.estados[3].capital_pais.ano_fim
-                                    },
-                                    {
-                                       capital_atual: projeto.listaDeEstados.estados[23].capital_pais.capital,
-                                       uf: projeto.listaDeEstados.estados[23].sigla,
-                                       descricao: projeto.listaDeEstados.estados[23].nome,
-                                       capital: projeto.listaDeEstados.estados[23].capital,
-                                       regiao: projeto.listaDeEstados.estados[23].regiao,
-                                       capital_pais_ano_inicio: projeto.listaDeEstados.estados[23].capital_pais.ano_inicio,
-                                       capital_pais_ano_termino: projeto.listaDeEstados.estados[23].capital_pais.ano_fim
-                                    }
-                                  ]
-                  }
-return capital
+    let status = false
+    let capital = {}
+    let array = []
+    
+
+    projeto.listaDeEstados.estados.forEach(function(item){
+        if(item.capital_pais != undefined){
+            array.push(
+                {
+                    capital_atual: item.capital_pais.capital,
+                    uf: item.sigla,
+                    descricao: item.nome,
+                    capital: item.capital,
+                    regiao: item.regiao,
+                    capital_pais_ano_inicio: item.capital_pais.ano_inicio,
+                    capital_pais_ano_termino: item.capital_pais.ano_fim,
+                }
+            )
+            capital.capitais = array
+            status = true
+        }
+    })
+    if(status == true){
+        return capital
+    }else{
+        return false
+    }
 }
 
 const getCidades = function(estado){
     let siglaEstado = String(estado).toUpperCase()
+    let status = false
     let cidade = {}
     let array = []
 
@@ -109,17 +120,21 @@ const getCidades = function(estado){
                 array.push(city.nome)
                 cidade.cidades = array
             })
+            status = true
         } 
     })
-    return cidade
+    if(status == true){
+        return cidade
+    }else{
+        return false
+    }
 }
 
 
 
 
 //console.log(getListaDeEstados())
-//console.log(getDadosEstado('SP'))
-//console.log(getDadosEstado('sp'))
+//console.log(getDadosEstado('Sp'))
 //console.log(getEstadosRegiao('nordeste'))
-//console.log(getCapitalPais())
-console.log(getCidades('SP'))
+console.log(getCapitalPais())
+//console.log(getCidades('ac'))
